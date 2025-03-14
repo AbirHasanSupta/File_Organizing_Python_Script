@@ -8,16 +8,26 @@ def week_of_month_extract(date):
     return (date.day + first_day.weekday()) // 7 + 1
 
 
+def month_group_extract(month, interval):
+    curr_year = datetime.now().year
+    month_start = ((month - 1) // interval) * interval + 1
+    month_end = min(month_start + interval - 1, 12)
+    start_month = datetime(curr_year, month_start, 1).strftime("%B")
+    end_month = datetime(curr_year, month_end, 1).strftime("%B")
+    return f"{start_month} - {end_month}"
+
+
 def organize_files_by_month(src_dir, timeframe):
     if not os.path.exists(src_dir):
         print(f"Directory '{src_dir}' does not exist.")
         return
-    for file in os.listdir(src_dir):
+    files = os.listdir(src_dir)
+    for file in files:
         path = os.path.join(src_dir, file)
         if os.path.isfile(path):
             try:
                 date = datetime.fromtimestamp(os.stat(path).st_mtime)
-
+                folder_name = None
                 if timeframe == "day":
                     folder_name = date.strftime("%B %d, %Y")
                 elif timeframe == "week":
@@ -26,11 +36,17 @@ def organize_files_by_month(src_dir, timeframe):
                     week = week_of_month_extract(date)
                     week_folder = f"Week {week}"
                     folder_name = os.path.join(month_folder, week_folder)
-
+                elif timeframe == "month":
+                    folder_name = date.strftime('%B %Y')
                 elif timeframe == "year":
                     folder_name = date.strftime("%Y")
                 else:
-                    folder_name = date.strftime('%B %Y')
+                    if timeframe.endswith('months'):
+                        interval = int(timeframe.split(' ')[0])
+                        folder_name = month_group_extract(date.month, interval)
+                if not folder_name:
+                    print("Invalid Timeframe")
+                    return
                 folder_path = os.path.join(src_dir, folder_name)
 
                 if not os.path.exists(folder_path):
@@ -40,7 +56,6 @@ def organize_files_by_month(src_dir, timeframe):
             except Exception as e:
                 print(f"Error in {file}: {e}")
     print("Files have been organized successfully.")
-
 
 
 
