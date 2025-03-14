@@ -21,8 +21,12 @@ def organize_files_by_month(src_dir, timeframe):
                 if timeframe == "day":
                     folder_name = date.strftime("%B %d, %Y")
                 elif timeframe == "week":
+                    month = date.strftime("%B %Y")
+                    month_folder = os.path.join(src_dir, month)
                     week = week_of_month_extract(date)
-                    folder_name = date.strftime(f"Week {week}, {date.strftime('%B %Y')}")
+                    week_folder = f"Week {week}"
+                    folder_name = os.path.join(month_folder, week_folder)
+
                 elif timeframe == "year":
                     folder_name = date.strftime("%Y")
                 else:
@@ -30,7 +34,7 @@ def organize_files_by_month(src_dir, timeframe):
                 folder_path = os.path.join(src_dir, folder_name)
 
                 if not os.path.exists(folder_path):
-                    os.mkdir(folder_path)
+                    os.makedirs(folder_path)
 
                 shutil.move(path, os.path.join(folder_path, file))
             except Exception as e:
