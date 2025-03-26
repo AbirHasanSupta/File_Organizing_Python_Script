@@ -10,7 +10,7 @@ A Python script to organize files in a specified directory based on modification
 ## Installation
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/file-organizer.git
+   git clone https://github.com/AbirHasanSupta/File_Organizing_Python_Script.git
    cd file-organizer
    ```
 ## Usage
