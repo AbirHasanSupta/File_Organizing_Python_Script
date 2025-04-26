@@ -45,6 +45,7 @@ def organize_files(src_dir, timeframe, date_type='default'):
         print(f"Directory '{src_dir}' does not exist.")
         return
     files = os.listdir(src_dir)
+    print("\nStarting organizing the files......\n\n")
     for file in files:
         path = os.path.join(src_dir, file)
         if os.path.isfile(path):
@@ -63,9 +64,10 @@ def organize_files(src_dir, timeframe, date_type='default'):
                     os.makedirs(folder_path)
 
                 shutil.move(path, os.path.join(folder_path, file))
+                print(f"File Moved from '{path}' to '{folder_path}'\n")
             except Exception as e:
                 print(f"Error in {file}: {e}")
-    print("Files have been organized successfully.")
+    print("\nFiles have been organized successfully.")
 
 
 
